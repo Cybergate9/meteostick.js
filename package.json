@@ -17,6 +17,7 @@
   "license": "MIT",
   "dependencies": {
     "serialport": "2.x.x",
+    "commander": "2.9.x"
   },
   "engine": ">= 5.4.0"
 }
