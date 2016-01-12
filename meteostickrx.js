@@ -262,7 +262,7 @@ function getCurrentDataCSV(){
   gCurrentData.warnings+
   "\"";
 
-  if(program.throwaway && CSVdata.match(/\"n\/a\"/)){
+  if(program.throwaway && (CSVdata.match(/\"n\/a\"/) || CSVdata.match(/\"\"/))){
        return null;
   }  else {
        return CSVdata;

@@ -15,10 +15,27 @@ Weather station is a Davis Vantage Vue
 
 ### Dependencies
 
-* serialport ([https://www.npmjs.com/package/serialport](https://www.npmjs.com/package/serialport))
+* serialport (npm) ([https://www.npmjs.com/package/serialport](https://www.npmjs.com/package/serialport))
 
-* commander
+* commander (npm)
 ([https://www.npmjs.com/package/commander](https://www.npmjs.com/package/commander))
+
+### Install on Debian
+To use this on Debian (my test is a Debian 8 VM on a QNAP NAS) you'll need all the same dependencies. To build serial port you'll need to follow instructions as per [these notes](https://www.npmjs.com/package/serialport#desktop-debianubuntu-linux)..
+
+Short version:
+
+`apt-get update
+apt-get install git
+apt-get install nodejs nodejs-legacy
+apt-get install npm
+apt-get install build-essentials`
+
+Now you have everything you can clone:
+`git clone https://github.com/ITWrangler/meteostick.js.git`
+
+Hardware: FTDI VCP drivers are already on Debian so your meteostick should register on something like /dev/TTYUSB0. Running 'node msfirsttest.js' should confirm serial devices available.
+
 
 
 ### Background
