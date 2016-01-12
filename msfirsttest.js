@@ -55,9 +55,6 @@ function showError(error) {
    console.log('Port error: ' + error);
 }
 function receiveSerialData(data) {
-   //console.log("\nreceiveSerialData:[" + data + ']');
-   //if(data.match(/Rain/gi) || data.match(/Panel/gi) ||
-   //data.match(/Wind/gi) || data.match(/Outdoor/gi)){
    console.log(data);
    // this (?) is the marker from meteostick that its ready to accept commands
    if(data.match(/\?/g)){
