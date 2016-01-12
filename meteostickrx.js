@@ -1,5 +1,5 @@
 // meteostickrx.js - Meteostick serial port data receiver
-// Licence: MIT Licence
+// Licence: MIT Licence (https://github.com/ITWrangler/meteostick.js/blob/master/LICENSE)
 // Copyright 2016 Shaun Osborne
 // run with 'node meteostickrx.js -h' for help
 // Note: this script with never stop - unless port closes for some reason - CTRL-C to exit
