@@ -25,15 +25,15 @@ To use this on Debian (my test is a Debian 8 VM on a QNAP NAS) you'll need all t
 
 Short version:
 
-`apt-get update
+`apt-get update`
 
-apt-get install git
+`apt-get install git`
 
-apt-get install nodejs nodejs-legacy
+`apt-get install nodejs nodejs-legacy`
 
-apt-get install npm
+`apt-get install npm`
 
-apt-get install build-essentials`
+`apt-get install build-essentials`
 
 Now you have everything you can clone:
 
