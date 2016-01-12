@@ -1,0 +1,22 @@
+{
+  "name": "meteostick.js",
+  "version": "0.0.5",
+  "description": "Nodejs code for communicating with the Meteostick.",
+  "main": "msfirsttest",
+  "repository" : {"type": "git", "url": "https://github.com/ITWrangler/meteostick.js.git"},
+  "scripts": {
+    "test": "echo \"Error: no tests specified\" && exit 1"
+  },
+  "keywords": [
+    "meteostick",
+    "javascript",
+    "weather",
+    "data"
+  ],
+  "author": "Shaun Osborne",
+  "license": "MIT",
+  "dependencies": {
+    "serialport": "2.x.x",
+  },
+  "engine": ">= 5.4.0"
+}
