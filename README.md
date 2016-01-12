@@ -1,23 +1,23 @@
-# meteostick.js
+## meteostick.js
 Nodejs code for communicating with the Meteostick.
 
-# Files
+## Files
 
-## msfirsttest.js
+### msfirsttest.js
 This is the simplest test code to establish that you can talk to and receive data from your meteostick
 
 
-# Test platform
+## Test platform
 I'm testing on OS X (10.11.2) using using Node.js v5.4 & npm serialport v2.0.6.
 Weather station is a Davis Vantage Vue
 
-# Dependencies
+## Dependencies
 
 * serialport ([https://www.npmjs.com/package/serialport](https://www.npmjs.com/package/serialport))
 
 
 
-#Background
+## Background
 [Meteostick](http://www.smartbedded.com/wiki/index.php/Meteostick) is produced by [Smartbedded](http://www.smartbedded.com/wiki/index.php/Main_Page) and is designed
 solely to communicate with [Davis weather stations](http://www.davisnet.com/weather/) via RF.
 
