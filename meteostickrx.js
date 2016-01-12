@@ -1,5 +1,6 @@
 // meteostickrx.js - Meteostick serial port data receiver
 // Licence: MIT Licence
+// Copyright 2016 Shaun Osborne
 // run with 'node meteostickrx.js -h' for help
 // Note: this script with never stop - unless port closes for some reason - CTRL-C to exit
 
@@ -53,9 +54,6 @@ else {
   portName = program.serialport;
 }
 
-
-
-
 //open the port using new() like so:
 var myPort = new SerialPort(portName, {
    baudRate: 115000,
@@ -63,12 +61,13 @@ var myPort = new SerialPort(portName, {
    parser: serialport.parsers.readline("\r")
  });
 
-/* event defintion callbacks */
+/* serialport event callbacks */
 myPort.on('open', showPortOpen);
 myPort.on('data', receiveSerialData);
 myPort.on('close', showPortClose);
 myPort.on('error', showError);
 
+/* end of main... */
 
 
 function showPortOpen() {
@@ -76,13 +75,17 @@ function showPortOpen() {
       myPort.options.baudRate+']');}
 }
 
+
 function showPortClose() {
    console.log('Port closed.');
 }
 
+
 function showError(error) {
    console.log('Port error: [' + error+']');
 }
+
+
 function receiveSerialData(data) {
    if(program.verbose){console.log('\rReceived:['+data.trim()+']');}
    processed=msDataParse(data,program.datatype);
@@ -94,13 +97,13 @@ function receiveSerialData(data) {
        console.log(processed);
      }
    }
-
    // this (?) is the marker from meteostick that its ready to accept commands
    if(data.match(/\?/g)){
       if(program.verbose){console.log("READY\r");}
       msSendCommands();
      }
 }
+
 
 function msSendCommands(){
   if(program.verbose){console.log("SENDING COMMANDS\r");}
@@ -109,17 +112,17 @@ function msSendCommands(){
   myPort.write("m1\r"); // EU frequency
 }
 
-function msDataParse(data,type){
 
+function msDataParse(data,type){
   var dtg = new Date();
   var result={};
   if(type == undefined){
     type='JSON';
   }
-
   parts = data.split(' ');
   result.dtg=dtg;
   gCurrentData.dtg = dtg;
+
   if(parts[0].match(/W/g)){
       if(type==='JSON'){
         result['type']='wind';
@@ -145,8 +148,8 @@ function msDataParse(data,type){
       }
     }
   }
-  if(parts[0].match(/R/g)){
 
+  if(parts[0].match(/R/g)){
      if(type==='JSON'){
        result['type']='rain';
        result['txId']=parts[1];
@@ -168,6 +171,7 @@ function msDataParse(data,type){
        return getCurrentDataCSV();
      }
     }
+
  if(parts[0].match(/P/g)){
         if(type==='JSON'){
        result['type']='solarpanel';
@@ -190,6 +194,7 @@ function msDataParse(data,type){
         return getCurrentDataCSV();
       }
     }
+
   if(parts[0].match(/T/g)){
     if(type === 'JSON'){
         result['type']='temperature';
@@ -214,6 +219,7 @@ function msDataParse(data,type){
           return getCurrentDataCSV();
         }
        }
+
    if(parts[0].match(/B/g) ){
          if(parseInt(parts[1]) > 10000){ // if we get spurious uncomputed values throw away
            return null;
@@ -238,11 +244,9 @@ function msDataParse(data,type){
          }
         }
   return null; // if we get here we dont recognise input
-
-}
+} /* end of msDataParse() */
 
 function getCurrentDataCSV(){
-
   var CSVdata = '"'+
   gCurrentData.dtg+'","'+
   gCurrentData.txid+'","'+
@@ -257,10 +261,10 @@ function getCurrentDataCSV(){
   gCurrentData.solarpanel+'","'+
   gCurrentData.warnings+
   "\"";
+
   if(program.throwaway && CSVdata.match(/\"n\/a\"/)){
-    return null;
-  }
-  else {
-    return CSVdata;
+       return null;
+  }  else {
+       return CSVdata;
   }
 }
