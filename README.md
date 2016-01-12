@@ -7,7 +7,7 @@ Node.js code for communicating with the Meteostick.
 This is the simplest test code to establish that you can talk to and receive data from your meteostick
 
 #### meteostickrx.js
-A more complete tool, capable of receiving and outputting in either JSON or CSV, node meteostickrx.js -h for help
+A more complete tool, capable of receiving and outputting in either JSON or CSV per line format, 'node meteostickrx.js -h' for help
 
 ### Test platform
 I'm testing on OS X (10.11.2) using using Node.js v5.4 & npm serialport v2.0.6.
@@ -17,6 +17,8 @@ Weather station is a Davis Vantage Vue
 
 * serialport ([https://www.npmjs.com/package/serialport](https://www.npmjs.com/package/serialport))
 
+* commander
+([https://www.npmjs.com/package/commander](https://www.npmjs.com/package/commander))
 
 
 ### Background

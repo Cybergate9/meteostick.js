@@ -5,6 +5,7 @@
 
 var serialport = require('serialport');
 var program = require('commander');
+var async = require('async');
 
 program.version('0.5.0')
 .option('-s --serialport [serial port path]', 'meteostick serial port path+name')
@@ -24,7 +25,7 @@ var gCurrentData={
   outsidehumidity: 'n/a',
   insidetemp: 'n/a',
   insidepressure: 'n/a',
-  goodrfpackets: 'n/a',
+  rfpackets: 'n/a',
   signalstrength: 'n/a',
   solarpanel: 'n/a',
   warnings:'none'
@@ -35,7 +36,7 @@ if(program.verbose){
   console.log("Meteostick 1.0 (board version) 2.3b1 (software version) quick test\r");
 }
 
-// list serial ports:
+// get list of serial ports:
 if(program.verbose){
   serialport.list(function (err, ports) {
   console.log("Available \"serialport\" ports:\r");
@@ -46,11 +47,13 @@ if(program.verbose){
 }
 
 if(program.serialport === undefined){
-portName = '/dev/cu.usbserial-AI02XBCI'; // my serial id on OS X
+  portName = '/dev/cu.usbserial-AI02XBCI'; // my serial id on OS X
 }
 else {
   portName = program.serialport;
 }
+
+
 
 
 //open the port using new() like so:
@@ -66,6 +69,8 @@ myPort.on('data', receiveSerialData);
 myPort.on('close', showPortClose);
 myPort.on('error', showError);
 
+
+
 function showPortOpen() {
    if(program.verbose){console.log('Port open:['+portName+'] with data rate:[' +
       myPort.options.baudRate+']');}
@@ -80,7 +85,7 @@ function showError(error) {
 }
 function receiveSerialData(data) {
    if(program.verbose){console.log('\rReceived:['+data.trim()+']');}
-   processed=msDataJSONParse(data,program.datatype);
+   processed=msDataParse(data,program.datatype);
    if(processed){
      if(program.datatype === 'JSON'){
        console.log(JSON.stringify(processed));
@@ -104,7 +109,7 @@ function msSendCommands(){
   myPort.write("m1\r"); // EU frequency
 }
 
-function msDataJSONParse(data,type){
+function msDataParse(data,type){
 
   var dtg = new Date();
   var result={};
@@ -221,14 +226,14 @@ function msDataJSONParse(data,type){
          result['value2']=parts[2];
          //result['value2']=(parseInt(parts[2])/328.13);
          result['value2Unit']='pressure (hPa)';
-         result['goodRFPackets']=parts[3];
+         result['RFPackets']=parts[3];
 
          return result;
          }
          if(type==='CSV'){
            gCurrentData.insidetemp = parts[1];
            gCurrentData.insidepressure = parts[2];
-           gCurrentData.goodrfpackets = parts[3];
+           gCurrentData.rfpackets = parts[3];
            return getCurrentDataCSV();
          }
         }
@@ -248,7 +253,7 @@ function getCurrentDataCSV(){
   gCurrentData.insidetemp+'","'+
   gCurrentData.insidepressure+'","'+
   gCurrentData.signalstrength+'","'+
-  gCurrentData.goodrfpackets+'","'+
+  gCurrentData.rfpackets+'","'+
   gCurrentData.solarpanel+'","'+
   gCurrentData.warnings+
   "\"";
