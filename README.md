@@ -6,6 +6,8 @@ Node.js code for communicating with the Meteostick.
 #### msfirsttest.js
 This is the simplest test code to establish that you can talk to and receive data from your meteostick
 
+#### meteostickrx.js
+A more complete tool, capable of receiving and outputting in either JSON or CSV, node meteostickrx.js -h for help
 
 ### Test platform
 I'm testing on OS X (10.11.2) using using Node.js v5.4 & npm serialport v2.0.6.
