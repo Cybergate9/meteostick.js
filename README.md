@@ -1,2 +1,4 @@
 # meteostick.js
-nodejs code for communicating with the Meteostick
+Nodejs code for communicating with the Meteostick.
+
+#Background
