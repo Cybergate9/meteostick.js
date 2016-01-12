@@ -26,12 +26,17 @@ To use this on Debian (my test is a Debian 8 VM on a QNAP NAS) you'll need all t
 Short version:
 
 `apt-get update
+
 apt-get install git
+
 apt-get install nodejs nodejs-legacy
+
 apt-get install npm
+
 apt-get install build-essentials`
 
 Now you have everything you can clone:
+
 `git clone https://github.com/ITWrangler/meteostick.js.git`
 
 Hardware: FTDI VCP drivers are already on Debian so your meteostick should register on something like /dev/TTYUSB0. Running 'node msfirsttest.js' should confirm serial devices available.
