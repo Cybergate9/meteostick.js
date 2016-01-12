@@ -10,8 +10,8 @@ This is the simplest test code to establish that you can talk to and receive dat
 A more complete tool, capable of receiving and outputting in either JSON or CSV per line format, 'node meteostickrx.js -h' for help
 
 ### Test platform
-I'm testing on OS X (10.11.2) using using Node.js v5.4 & npm serialport v2.0.6.
-Weather station is a Davis Vantage Vue
+Basic testing is on OS X (10.11.2) using using Node.js v5.4 & npm serialport v2.0.6.
+Weather station is a Davis Vantage Vue.
 
 ### Dependencies
 
@@ -21,7 +21,7 @@ Weather station is a Davis Vantage Vue
 ([https://www.npmjs.com/package/commander](https://www.npmjs.com/package/commander))
 
 ### Install on Debian
-To use this on Debian (my test is a Debian 8 VM on a QNAP NAS) you'll need all the same dependencies. To build serial port you'll need to follow instructions as per [these notes](https://www.npmjs.com/package/serialport#desktop-debianubuntu-linux)..
+To use this on Debian (my test is a Debian 8 VM on a QNAP NAS) you'll need all the same dependencies. For npm serialport to build you'll need to follow instructions as per [these notes](https://www.npmjs.com/package/serialport#desktop-debianubuntu-linux)..
 
 Short version:
 
@@ -35,9 +35,11 @@ Short version:
 
 `apt-get install build-essentials`
 
-Now you have everything you can clone:
+Now you have everything you can clone and install (package.json gets read by npm):
 
 `git clone https://github.com/ITWrangler/meteostick.js.git`
+
+`npm install`
 
 Hardware: FTDI VCP drivers are already on Debian so your meteostick should register on something like /dev/TTYUSB0. Running 'node msfirsttest.js' should confirm serial devices available.
 
