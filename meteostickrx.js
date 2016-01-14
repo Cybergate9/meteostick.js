@@ -55,31 +55,29 @@ if(program.verbose){
   console.log("Meteostick Receiver (for board version:1.0, software version:2.3b1\r");
 }
 
-// get list of serial ports:
+// get list of serial ports if we're running verbose
 if(program.verbose){
   serialport.list(function (err, ports) {
   console.log("Available \"serialport\" ports:\r");
   ports.forEach(function(port) {
     console.log(port.comName);
-
   });
 });
 }
 
-
 if(program.serialport === undefined){
-  portName = gPortName;
+  portName = gPortName; //default to global static
 }
-else {
+else{
   portName = program.serialport;
 }
 
-//open the port using new() like so:
+//open the port using new()
 var myPort = new SerialPort(portName, {
    baudRate: 115000,
    // look for return and newline at the end of each data packet:
    parser: serialport.parsers.readline("\r")
- });
+});
 
 /* serialport event callbacks */
 myPort.on('open', showPortOpen);
@@ -95,38 +93,34 @@ function showPortOpen() {
       myPort.options.baudRate+']');}
 }
 
-
 function showPortClose() {
    console.log('Port closed.');
 }
-
 
 function showError(error) {
    console.log('Port error: [' + error+']');
 }
 
-
 function receiveSerialData(data) {
    if(program.verbose){console.log('\rReceived:['+data.trim()+']');}
    processed=msDataParse(data,program.datatype);
-   if(processed){
-     if(program.datatype === 'JSON'){
+   if(processed){ //msDataParse() either returns something or null if it can't parse with current settings
+     if(program.datatype === 'JSON'){ // if its JSON stringify it
        console.log(JSON.stringify(processed));
      }
      else if(program.datatype == 'SQL' && processed === 'SQL'){
-       writeCurrentDataSQL();
+       writeCurrentDataSQL(); //if its SQL write it to DB
      }
      else {
-       console.log(processed);
+       console.log(processed); // otherwise its CSV, just write it
      }
    }
    // this (?) is the marker from meteostick that its ready to accept commands
-   if(data.match(/\?/g)){
+   if(data.match(/\?/g)){ // and if so send our setup commands
       if(program.verbose){console.log("READY\r");}
       msSendCommands();
      }
 }
-
 
 function msSendCommands(){
   if(program.verbose){console.log("SENDING COMMANDS\r");}
@@ -134,7 +128,6 @@ function msSendCommands(){
   myPort.write("t255\r"); // show all 8 channels
   myPort.write("m1\r"); // EU frequency
 }
-
 
 function msDataParse(data,type){
   if(program.verbose){console.log("parse:["+type+"] data:["+data.trim()+"]");}
@@ -169,9 +162,9 @@ function msDataParse(data,type){
         if(parts[5] !== undefined){
           gCurrentData.warnings='low battery'
         return getCurrentDataCSV();
+        }
       }
-    }
-      if(type==='SQL'){
+     if(type==='SQL'){
         gCurrentData.txid = parts[1];
         gCurrentData.windspeed = parts[2];
         gCurrentData.winddirection = parts[3];
@@ -180,7 +173,7 @@ function msDataParse(data,type){
           gCurrentData.warnings='low battery'
         }
         return 'SQL';
-    }
+     }
 }
 
   if(parts[0].match(/R/g)){
@@ -327,17 +320,17 @@ function getCurrentDataCSV(){
   gCurrentData.solarpanel+'","'+
   gCurrentData.warnings+
   "\"";
-
   if(program.throwaway && (CSVdata.match(/\"n\/a\"/) || CSVdata.match(/\"\"/))){
-       return null;
-  }  else {
-       return CSVdata;
+    return null;
+  }
+  else{
+    return CSVdata;
   }
 }
 
 function writeCurrentDataSQL(){
   if(program.throwaway && getCurrentDataCSV() === null){
-    return;
+    return; // if we're instructed to throw away incomplete data do so (just return)
   }
   db.run("INSERT INTO " + dbtable + " ("+
       "dtg, txid, windspeed ,winddirection ," +
@@ -361,12 +354,5 @@ function writeCurrentDataSQL(){
         if(err){
           throw new Error("SQL Insert Error: "+err);
          }
-      }
-    );
-
-}
-
-function pauseInMS(ms) {
-ms += new Date().getTime();
-while (new Date() < ms){}
+      });
 }

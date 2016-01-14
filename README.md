@@ -10,7 +10,6 @@ Usage: node msfirstest.js [serialportname]
 
 where serialportname [optional] = /dev/ttyUSB0 or similar on a \*nix type system
 
-
 #### meteostickrx.js
 A more complete tool, capable of receiving and outputting in JSON or CSV per line format, or
 to a SQLite database.
