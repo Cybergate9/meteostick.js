@@ -56,18 +56,18 @@ Now you should have everything you need, and can clone and install (package.json
 
 Hardware: FTDI VCP drivers are already on Debian so your meteostick should register on something like /dev/TTYUSB0. Running 'node msfirsttest.js' should confirm serial devices available.
 
-### Install Node.js 5.x on Debian
+### An aside... Installing Node.js 5.x on Debian
 
 A number of problems are solved by moving from node.js 0.10.x (a standard apt-get install nodejs uses 0.10.x) to 5.4.x on Debian. So the quick version is:
 
-* install 5.x using:
+Install 5.x using:
 
-apt-get install curl
+>apt-get install curl
 
-curl -sL https://deb.nodesource.com/setup_5.x | bash -
+>curl -sL https://deb.nodesource.com/setup_5.x | bash -
  (as per [this](https://github.com/nodejs/node-v0.x-archive/wiki/Installing-Node.js-via-package-manager))
 
-apt-get install nodejs
+>apt-get install nodejs
 
 You should now have a full node/npm 5.x install, confirm with 'node -v' and 'nodejs -v'
 
