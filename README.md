@@ -18,13 +18,17 @@ into a SQLite database.
 
 #### dbcreate.js
 A simple script to create and/or empty the meteostickrx.db SQLite file.
-'node dbcreate.js' - to create db file meteostickrx.db with tbl_weatherdata
-'node dbcreate.js DROP' - to re-create (empty) tbl_weatherdata in existing meteostickrx.db file
+
+`node dbcreate.js` - to create db file meteostickrx.db with tbl_weatherdata
+
+`node dbcreate.js DROP` - to re-create (empty) tbl_weatherdata in existing meteostickrx.db file
 
 
 ### Test platform
 My basic testing has been on OS X (10.11.2) using using Node.js v5.4 & npm serialport v2.0.6.
-I have also test on a Debian 8 system.
+
+I have also installed and tested on a Debian 8 system from the git repository.
+
 Weather station is a Davis Vantage Vue.
 
 ### Dependencies
@@ -38,7 +42,9 @@ Weather station is a Davis Vantage Vue.
 ([https://www.npmjs.com/package/sqlite3](https://www.npmjs.com/package/sqlite3))
 
 ### Install on Debian
-To use this on Debian (my test is a Debian 8 VM on a QNAP NAS) you'll need all the same dependencies. For npm serialport to build you'll need to follow instructions as per [these notes](https://www.npmjs.com/package/serialport#desktop-debianubuntu-linux)..
+To use this on Debian (my test is a Debian 8 VM on a QNAP NAS) you'll need all the same dependencies.
+
+For npm serialport to build you'll need to follow instructions as per [these notes](https://www.npmjs.com/package/serialport#desktop-debianubuntu-linux)..
 
 Short version:
 
@@ -73,11 +79,11 @@ Install 5.x using:
 
 `apt-get install nodejs`
 
-You should now have a full node/npm 5.x install, confirm with 'node -v' and 'nodejs -v'
+You should now have a full node/npm 5.x install, confirm with `node -v` and `nodejs -v`
 
 At this point it's probably best to reinstall all the NPM modules, so:
 
-* delete your node_modules dir (e.g. `rm -rf node_modules` in you *project directory only*)
+* delete your node_modules dir (e.g. `rm -rf node_modules` in your *project directory only*)
 
 * force a re-install with `npm install`, which will read dependencies to install as usual from package.json
 
@@ -88,7 +94,7 @@ I had issues installing both sqlite3 and serialport npm modules before this.. an
 The [Meteostick](http://www.smartbedded.com/wiki/index.php/Meteostick) is produced by [Smartbedded](http://www.smartbedded.com/wiki/index.php/Main_Page) and is designed
 solely to communicate with [Davis weather stations](http://www.davisnet.com/weather/) via RF making data available via a virtual serial/comms port (VCP).
 
-According to their blurb, it is compatible with Davis® Vantage Pro2, Vantage Pro2 Plus, and Vantage Vue sensors as well as various oem-branded hardware based on [Fine Offset](http://www.foshk.com/)) weather stations - e.g the HP-100x series.
+According to their blurb, it is compatible with Davis® Vantage Pro2, Vantage Pro2 Plus, and Vantage Vue sensors as well as various oem-branded hardware based on [Fine Offset](http://www.foshk.com/) weather stations - e.g the HP-100x series.
 
 It's interesting because it's well under half the price of the competing Davis product -
 the [IP Weather Link](http://www.davisnet.com/weather/products/weather_product.asp?pnum=06555). Although obviously you have to write your own code..

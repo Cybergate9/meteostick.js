@@ -11,8 +11,8 @@ var serialport = require('serialport');
 var program = require('commander');
 var sqlite3 = require('sqlite3');
 
-var dbname = 'meteostickrx.db';
-var dbtable = 'tbl_weatherdata';
+var gDBName = 'meteostickrx.db';
+var gDBTable = 'tbl_weatherdata';
 
 program.version('0.6.1')
 .option('-s --serialport [serial port path]', 'meteostick serial port path+name')
@@ -40,12 +40,12 @@ var gCurrentData={ /*globally available weather data object */
 };
 
 if(program.datatype === 'SQL'){
- var db = new sqlite3.Database(dbname,function(err){
+ var db = new sqlite3.Database(gDBName,function(err){
    if(err){
      throw new Error(err);
    }
    else{
-   if(program.verbose) {console.log('DB ['+dbname+'] open..');}
+   if(program.verbose) {console.log('DB ['+gDBName+'] opened..');}
    }
  });
 }
@@ -332,7 +332,7 @@ function writeCurrentDataSQL(){
   if(program.throwaway && getCurrentDataCSV() === null){
     return; // if we're instructed to throw away incomplete data do so (just return)
   }
-  db.run("INSERT INTO " + dbtable + " ("+
+  db.run("INSERT INTO " + gDBTable + " ("+
       "dtg, txid, windspeed ,winddirection ," +
       "outsidetemp, outsidehumidity, insidetemp," +
       "insidepressure, signalstrength, rfpackets ," +
