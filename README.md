@@ -54,9 +54,10 @@ Hardware: FTDI VCP drivers are already on Debian so your meteostick should regis
 
 ### Background
 [Meteostick](http://www.smartbedded.com/wiki/index.php/Meteostick) is produced by [Smartbedded](http://www.smartbedded.com/wiki/index.php/Main_Page) and is designed
-solely to communicate with [Davis weather stations](http://www.davisnet.com/weather/) via RF.
+solely to communicate with [Davis weather stations](http://www.davisnet.com/weather/) via RF
+(according to their blurb compatible with Davis® VantageTM Pro2, VantageTM Pro2 Plus and VantageTM Vue sensors and various oem-branded hardware from [Fine Offset](http://www.foshk.com/)).
 
 It's interesting because it's well under half the price of the competing Davis product -
-[IP Weather Link](http://www.davisnet.com/weather/products/weather_product.asp?pnum=06555).
+the [IP Weather Link](http://www.davisnet.com/weather/products/weather_product.asp?pnum=06555).
 
 So, with a meteostick, you can communicate with your Davis weather station, without interrupting data flow to your Davis console, allowing you to log all the data on your chosen system.
