@@ -3,6 +3,9 @@
 // Copyright 2016 Shaun Osborne
 // run with 'node meteostickrx.js -h' for help
 // Note: this script with never stop - unless port closes for some reason - CTRL-C to exit
+// Versions:
+// 0.5 - initial
+// 0.6 - very basic sqlite support added
 
 var serialport = require('serialport');
 var program = require('commander');
@@ -11,7 +14,7 @@ var sqlite3 = require('sqlite3');
 var dbname = 'meteostickrx.db';
 var dbtable = 'tbl_weatherdata';
 
-program.version('0.6.0')
+program.version('0.6.1')
 .option('-s --serialport [serial port path]', 'meteostick serial port path+name')
 .option('-d --datatype [JSON|CSV|SQL]', 'output type', 'JSON')
 .option('-t --throwaway', 'throw away not fully populated CSV/SQL output')
@@ -20,7 +23,8 @@ program.version('0.6.0')
 
 var SerialPort = serialport.SerialPort;
 
-var gCurrentData={
+var gPortName='/dev/cu.usbserial-AI02XBCI';  /* global static portname, default my portname on OS X */
+var gCurrentData={ /*globally available weather data object */
   dtg : 'na',
   txid: 'na',
   windspeed: 'n/a',
@@ -48,7 +52,7 @@ if(program.datatype === 'SQL'){
 
 //hello!
 if(program.verbose){
-  console.log("Meteostick 1.0 (board version) 2.3b1 (software version) quick test\r");
+  console.log("Meteostick Receiver (for board version:1.0, software version:2.3b1\r");
 }
 
 // get list of serial ports:
@@ -57,17 +61,18 @@ if(program.verbose){
   console.log("Available \"serialport\" ports:\r");
   ports.forEach(function(port) {
     console.log(port.comName);
+
   });
 });
 }
 
+
 if(program.serialport === undefined){
-  portName = '/dev/cu.usbserial-AI02XBCI'; // my serial id on OS X
+  portName = gPortName;
 }
 else {
   portName = program.serialport;
 }
-
 
 //open the port using new() like so:
 var myPort = new SerialPort(portName, {
@@ -110,8 +115,8 @@ function receiveSerialData(data) {
      }
      else if(program.datatype == 'SQL' && processed === 'SQL'){
        writeCurrentDataSQL();
-    }
-    else {
+     }
+     else {
        console.log(processed);
      }
    }
@@ -359,4 +364,9 @@ function writeCurrentDataSQL(){
       }
     );
 
+}
+
+function pauseInMS(ms) {
+ms += new Date().getTime();
+while (new Date() < ms){}
 }
