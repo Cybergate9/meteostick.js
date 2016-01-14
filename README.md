@@ -1,5 +1,5 @@
 ## meteostick.js
-Node.js code for communicating with the Meteostick.
+Node.js code for communicating with the Meteostick. Receives data from weather station via meteostick and outputs as CSV, JSON or into a SQLite database.
 
 ### Files
 
@@ -7,7 +7,11 @@ Node.js code for communicating with the Meteostick.
 This is the simplest test code to establish that you can talk to and receive data from your meteostick
 
 #### meteostickrx.js
-A more complete tool, capable of receiving and outputting in either JSON or CSV per line format, 'node meteostickrx.js -h' for help
+A more complete tool, capable of receiving and outputting in JSON or CSV per line format, or
+to a SQLite databse 'node meteostickrx.js -h' for help
+
+#### dbcreate.js
+A simple script to create and/or empty the meteostickrx.db SQLite file.
 
 ### Test platform
 Basic testing is on OS X (10.11.2) using using Node.js v5.4 & npm serialport v2.0.6.
@@ -19,6 +23,9 @@ Weather station is a Davis Vantage Vue.
 
 * commander (npm)
 ([https://www.npmjs.com/package/commander](https://www.npmjs.com/package/commander))
+
+* sqlite3 (npm)
+([https://www.npmjs.com/package/sqlite3](https://www.npmjs.com/package/sqlite3))
 
 ### Install on Debian
 To use this on Debian (my test is a Debian 8 VM on a QNAP NAS) you'll need all the same dependencies. For npm serialport to build you'll need to follow instructions as per [these notes](https://www.npmjs.com/package/serialport#desktop-debianubuntu-linux)..

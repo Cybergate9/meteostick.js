@@ -6,12 +6,15 @@
 
 var serialport = require('serialport');
 var program = require('commander');
-var async = require('async');
+var sqlite3 = require('sqlite3');
 
-program.version('0.5.0')
+var dbname = 'meteostickrx.db';
+var dbtable = 'tbl_weatherdata';
+
+program.version('0.6.0')
 .option('-s --serialport [serial port path]', 'meteostick serial port path+name')
-.option('-d --datatype [JSON|CSV]', 'output string type', 'JSON')
-.option('-t --throwaway', 'throw away not fully populated CSV output')
+.option('-d --datatype [JSON|CSV|SQL]', 'output type', 'JSON')
+.option('-t --throwaway', 'throw away not fully populated CSV/SQL output')
 .option('-v --verbose', 'output statuses etc')
 .parse(process.argv);
 
@@ -31,6 +34,17 @@ var gCurrentData={
   solarpanel: 'n/a',
   warnings:'none'
 };
+
+if(program.datatype === 'SQL'){
+ var db = new sqlite3.Database(dbname,function(err){
+   if(err){
+     throw new Error(err);
+   }
+   else{
+   if(program.verbose) {console.log('DB ['+dbname+'] open..');}
+   }
+ });
+}
 
 //hello!
 if(program.verbose){
@@ -53,6 +67,7 @@ if(program.serialport === undefined){
 else {
   portName = program.serialport;
 }
+
 
 //open the port using new() like so:
 var myPort = new SerialPort(portName, {
@@ -93,7 +108,10 @@ function receiveSerialData(data) {
      if(program.datatype === 'JSON'){
        console.log(JSON.stringify(processed));
      }
-     else{
+     else if(program.datatype == 'SQL' && processed === 'SQL'){
+       writeCurrentDataSQL();
+    }
+    else {
        console.log(processed);
      }
    }
@@ -114,9 +132,10 @@ function msSendCommands(){
 
 
 function msDataParse(data,type){
+  if(program.verbose){console.log("parse:["+type+"] data:["+data.trim()+"]");}
   var dtg = new Date();
   var result={};
-  if(type == undefined){
+  if(type === undefined){
     type='JSON';
   }
   parts = data.split(' ');
@@ -147,7 +166,17 @@ function msDataParse(data,type){
         return getCurrentDataCSV();
       }
     }
-  }
+      if(type==='SQL'){
+        gCurrentData.txid = parts[1];
+        gCurrentData.windspeed = parts[2];
+        gCurrentData.winddirection = parts[3];
+        gCurrentData.signalstrength = parts[4];
+        if(parts[5] !== undefined){
+          gCurrentData.warnings='low battery'
+        }
+        return 'SQL';
+    }
+}
 
   if(parts[0].match(/R/g)){
      if(type==='JSON'){
@@ -170,6 +199,15 @@ function msDataParse(data,type){
        }
        return getCurrentDataCSV();
      }
+     if(type==='SQL'){
+       gCurrentData.txid = parts[1];
+       gCurrentData.rain = parts[2];
+       gCurrentData.signalstrength = parts[3];
+       if(parts[3] !== undefined){
+         gCurrentData.warnings='low battery'
+       }
+      return 'SQL';
+   }
     }
 
  if(parts[0].match(/P/g)){
@@ -193,7 +231,16 @@ function msDataParse(data,type){
         }
         return getCurrentDataCSV();
       }
+      if(type==='SQL'){
+        gCurrentData.txid = parts[1];
+        gCurrentData.solarpanel = parts[2];
+        gCurrentData.signalstrength = parts[3];
+        if(parts[3] !== undefined){
+          gCurrentData.warnings='low battery'
+        }
+         return 'SQL';
     }
+  }
 
   if(parts[0].match(/T/g)){
     if(type === 'JSON'){
@@ -218,6 +265,15 @@ function msDataParse(data,type){
           }
           return getCurrentDataCSV();
         }
+        if(type==='SQL'){
+          gCurrentData.txid = parts[1];
+          gCurrentData.outsidetemp = parts[2];
+          gCurrentData.outsidehumidity = parts[3];
+          if(parts[3] !== undefined){
+            gCurrentData.warnings='low battery'
+          }
+          return 'SQL';
+      }
        }
 
    if(parts[0].match(/B/g) ){
@@ -233,7 +289,6 @@ function msDataParse(data,type){
          //result['value2']=(parseInt(parts[2])/328.13);
          result['value2Unit']='pressure (hPa)';
          result['RFPackets']=parts[3];
-
          return result;
          }
          if(type==='CSV'){
@@ -242,7 +297,13 @@ function msDataParse(data,type){
            gCurrentData.rfpackets = parts[3];
            return getCurrentDataCSV();
          }
-        }
+         if(type==='SQL'){
+           gCurrentData.insidetemp = parts[1];
+           gCurrentData.insidepressure = parts[2];
+           gCurrentData.rfpackets = parts[3];
+           return 'SQL';
+         }
+      }
   return null; // if we get here we dont recognise input
 } /* end of msDataParse() */
 
@@ -267,4 +328,35 @@ function getCurrentDataCSV(){
   }  else {
        return CSVdata;
   }
+}
+
+function writeCurrentDataSQL(){
+  if(program.throwaway && getCurrentDataCSV() === null){
+    return;
+  }
+  db.run("INSERT INTO " + dbtable + " ("+
+      "dtg, txid, windspeed ,winddirection ," +
+      "outsidetemp, outsidehumidity, insidetemp," +
+      "insidepressure, signalstrength, rfpackets ," +
+      "solarpanel, warnings)"+
+      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      [gCurrentData.dtg,
+      gCurrentData.txid,
+      gCurrentData.windspeed,
+      gCurrentData.winddirection,
+      gCurrentData.outsidetemp,
+      gCurrentData.outsidehumidity,
+      gCurrentData.insidetemp,
+      gCurrentData.insidepressure,
+      gCurrentData.signalstrength,
+      gCurrentData.rfpackets,
+      gCurrentData.solarpanel,
+      gCurrentData.warnings],
+      function(err){
+        if(err){
+          throw new Error("SQL Insert Error: "+err);
+         }
+      }
+    );
+
 }
