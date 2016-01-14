@@ -4,11 +4,18 @@ Node.js code for communicating with the Meteostick. Receives data from weather s
 ### Files
 
 #### msfirsttest.js
-This is the simplest test code to establish that you can talk to and receive data from your meteostick
+This is the simplest test code to establish that you can talk to and receive data from your meteostick.
+
+Usage: node msfirstest.js [serialportname]
+
+where serialportname [optional] = /dev/ttyUSB0 or similar on a \*nix type system
+
 
 #### meteostickrx.js
 A more complete tool, capable of receiving and outputting in JSON or CSV per line format, or
-to a SQLite databse 'node meteostickrx.js -h' for help
+to a SQLite database.
+
+ 'node meteostickrx.js -h' for help
 
 #### dbcreate.js
 A simple script to create and/or empty the meteostickrx.db SQLite file.
@@ -42,7 +49,7 @@ Short version:
 
 `apt-get install build-essentials`
 
-Now you have everything you can clone and install (package.json gets read by npm):
+Now you should have everything you need, and can clone and install (package.json gets read by npm):
 
 `git clone https://github.com/ITWrangler/meteostick.js.git`
 
@@ -54,10 +61,11 @@ Hardware: FTDI VCP drivers are already on Debian so your meteostick should regis
 
 ### Background
 [Meteostick](http://www.smartbedded.com/wiki/index.php/Meteostick) is produced by [Smartbedded](http://www.smartbedded.com/wiki/index.php/Main_Page) and is designed
-solely to communicate with [Davis weather stations](http://www.davisnet.com/weather/) via RF
-(according to their blurb compatible with Davis® VantageTM Pro2, VantageTM Pro2 Plus and VantageTM Vue sensors and various oem-branded hardware from [Fine Offset](http://www.foshk.com/)).
+solely to communicate with [Davis weather stations](http://www.davisnet.com/weather/) via RF making data available via a virtual serial/comms port (VCP).
+
+According to their blurb, is compatible with Davis® Vantage Pro2, Vantage Pro2 Plus and Vantage Vue sensors and various oem-branded hardware from [Fine Offset](http://www.foshk.com/)).
 
 It's interesting because it's well under half the price of the competing Davis product -
-the [IP Weather Link](http://www.davisnet.com/weather/products/weather_product.asp?pnum=06555).
+the [IP Weather Link](http://www.davisnet.com/weather/products/weather_product.asp?pnum=06555). Although obviously you have to write your own code..
 
 So, with a meteostick, you can communicate with your Davis weather station, without interrupting data flow to your Davis console, allowing you to log all the data on your chosen system.

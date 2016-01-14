@@ -8,6 +8,9 @@
 
 // Note: this script with never stop - unless port closes for some reason - CTRL-C to exit
 
+// Usage: node msfirstest.js [serialportname]
+// serial port name = /dev/ttyUSB0 or similar on a *nix type system
+
 var serialport = require('serialport');
 
 var SerialPort = serialport.SerialPort;
@@ -16,7 +19,7 @@ var SerialPort = serialport.SerialPort;
 console.log("Meteostick first test - tested on board version: 1.00, software version: 2.3b1\r");
 
 // list serial ports:
-  serialport.list(function (err, ports) {
+serialport.list(function (err, ports) {
   console.log("Available \"serialport\" ports:\r");
   ports.forEach(function(port) {
     console.log(port.comName);
