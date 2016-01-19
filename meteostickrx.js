@@ -6,6 +6,7 @@
 // Versions:
 // 0.5 - initial
 // 0.6 - very basic sqlite support added
+// 0.6.2 - datetimegroup fixed to output unixepoch time to match with sqlite
 
 var serialport = require('serialport');
 var program = require('commander');
@@ -14,7 +15,7 @@ var sqlite3 = require('sqlite3');
 var gDBName = 'meteostickrx.db';
 var gDBTable = 'tbl_weatherdata';
 
-program.version('0.6.1')
+program.version('0.6.2')
 .option('-s --serialport [serial port path]', 'meteostick serial port path+name')
 .option('-d --datatype [JSON|CSV|SQL]', 'output type', 'JSON')
 .option('-t --throwaway', 'throw away not fully populated CSV/SQL output')
@@ -25,7 +26,7 @@ var SerialPort = serialport.SerialPort;
 
 var gPortName='/dev/cu.usbserial-AI02XBCI';  /* global static portname, default my portname on OS X */
 var gCurrentData={ /*globally available weather data object */
-  dtg : 'na',
+  dtg : 0,
   txid: 'na',
   windspeed: 'n/a',
   winddirection: 'n/a',
@@ -131,7 +132,7 @@ function msSendCommands(){
 
 function msDataParse(data,type){
   if(program.verbose){console.log("parse:["+type+"] data:["+data.trim()+"]");}
-  var dtg = new Date();
+  var dtg = Math.floor(Date.now() / 1000); // seconds since 1970, e.g. unix time
   var result={};
   if(type === undefined){
     type='JSON';
