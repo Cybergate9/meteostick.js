@@ -16,6 +16,11 @@ into a SQLite database.
 
  'node meteostickrx.js -h' for help
 
+#### weather-sql-2-wow.js
+Takes the latest readings fromt he SQLite database, at intervals (default 15 mins)
+
+ 'node weather-sql-2-wow.js -h' for help
+
 #### dbcreate.js
 A simple script to create and/or empty the meteostickrx.db SQLite file.
 
