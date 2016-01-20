@@ -53,7 +53,7 @@ if(program.datatype === 'SQL'){
 
 //hello!
 if(program.verbose){
-  console.log("Meteostick Receiver (for board version:1.0, software version:2.3b1\r");
+  console.log("Meteostick Receiver (for board version:1.0, software version:2.3b1");
 }
 
 // get list of serial ports if we're running verbose
