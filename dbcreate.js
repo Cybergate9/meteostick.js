@@ -9,7 +9,9 @@ var sqlite3 = require('sqlite3');
 var db = new sqlite3.Database('meteostickrx.db');
 
 db.serialize(function() {
-  if(process.argv[2].match(/drop/gi)){db.run("DROP TABLE tbl_weatherdata");}
+  if(process.argv[2] === 'DROP' || process.argv[2] === 'drop' ){
+      db.run("DROP TABLE tbl_weatherdata");
+    }
   db.run(
     "CREATE TABLE tbl_weatherdata (" +
     "dtg int, txid int, windspeed int, winddirection int," +

@@ -100,3 +100,5 @@ It's interesting because it's well under half the price of the competing Davis p
 the [IP Weather Link](http://www.davisnet.com/weather/products/weather_product.asp?pnum=06555). Although obviously you have to write your own code..
 
 So, with a meteostick, you can communicate with your Davis weather station, without interrupting data flow to your Davis console, allowing you to log all the data on your chosen system.
+
+Meteostick [Manual](http://www.smartbedded.com/files/manual-en.pdf).
