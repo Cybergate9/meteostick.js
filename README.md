@@ -3,7 +3,7 @@ Node.js code for communicating with the [Meteostick](http://www.smartbedded.com/
 
 It's all a bit rough around the edges at the moment but whats here works..
 
-The short version is meteostickrx.js running continuously updating a sqlite3 db, then upload2wow.js reads the last values from that database on a timer schedule (default 15 mins) and upload to your WOW site (e.g http://wow.metoffice.gov.uk/tabulardata?&siteID=952386001) 
+The short version is meteostickrx.js running continuously updating a sqlite3 db, then upload2wow.js reads the last values from that database on a timer schedule (default 15 mins) and uploads to your WOW site (e.g http://wow.metoffice.gov.uk/tabulardata?&siteID=952386001) 
 
 ### Files
 
