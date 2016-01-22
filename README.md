@@ -1,6 +1,10 @@
 ## meteostick.js
 Node.js code for communicating with the [Meteostick](http://www.smartbedded.com/wiki/index.php/Meteostick). Receives data from weather station via meteostick and outputs as CSV, JSON or into a SQLite database.
 
+It's all a bit rough around the edges at the moment but whats here works..
+
+The short version is meteostickrx.js running continuously updating a sqlite3 db, then upload2wow.js reads the last values from that database on a timer schedule (default 15 mins) and upload to your WOW site (e.g http://wow.metoffice.gov.uk/tabulardata?&siteID=952386001) 
+
 ### Files
 
 #### msfirsttest.js
@@ -16,10 +20,10 @@ into a SQLite database.
 
  'node meteostickrx.js -h' for help
 
-#### weather-sql-2-wow.js
-Takes the latest readings fromt he SQLite database, at intervals (default 15 mins)
+#### upload2wow.js
+Takes the latest readings from the SQLite database (being written by meteostickrx.js), at intervals (default 15 mins), and upload to WOW (http://wow.metoffice.gov.uk/)
 
- 'node weather-sql-2-wow.js -h' for help
+ 'node upload2wow.js -h' for help
 
 #### dbcreate.js
 A simple script to create and/or empty the meteostickrx.db SQLite file.

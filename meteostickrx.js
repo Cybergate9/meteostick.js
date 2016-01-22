@@ -7,6 +7,7 @@
 // 0.5 - initial
 // 0.6 - very basic sqlite support added
 // 0.6.2 - datetimegroup fixed to output unixepoch time to match with sqlite
+// 0.6.2 - added raw output option
 
 var serialport = require('serialport');
 var program = require('commander');
@@ -17,7 +18,7 @@ var gDBTable = 'tbl_weatherdata';
 
 program.version('0.6.2')
 .option('-s --serialport [serial port path]', 'meteostick serial port path+name')
-.option('-d --datatype [JSON|CSV|SQL]', 'output type', 'JSON')
+.option('-d --datatype [JSON|CSV|SQL|RAW]', 'output type', 'JSON')
 .option('-t --throwaway', 'throw away not fully populated CSV/SQL output')
 .option('-v --verbose', 'output statuses etc')
 .parse(process.argv);
@@ -104,6 +105,16 @@ function showError(error) {
 
 function receiveSerialData(data) {
    if(program.verbose){console.log('\rReceived:['+data.trim()+']');}
+   // this (?) is the marker from meteostick that its ready to accept commands
+   if(data.match(/\?/g)){ // and if so send our setup commands
+      if(program.verbose){console.log("READY\r");}
+      msSendCommands();
+      return;
+     }
+   if(program.datatype === 'RAW'){
+     console.log(data);
+     return;
+   }
    processed=msDataParse(data,program.datatype);
    if(processed){ //msDataParse() either returns something or null if it can't parse with current settings
      if(program.datatype === 'JSON'){ // if its JSON stringify it
@@ -116,11 +127,7 @@ function receiveSerialData(data) {
        console.log(processed); // otherwise its CSV, just write it
      }
    }
-   // this (?) is the marker from meteostick that its ready to accept commands
-   if(data.match(/\?/g)){ // and if so send our setup commands
-      if(program.verbose){console.log("READY\r");}
-      msSendCommands();
-     }
+
 }
 
 function msSendCommands(){

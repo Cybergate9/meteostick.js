@@ -1,12 +1,12 @@
-// meteosticktx.js - Meteostick WOW data transmitter
-// for getting the latest values from SQLite and http'ing them up to
-// http://wow.metoffice.gov.uk/
+// upload2wow.js - gets the latest values from SQLite (put there by meteostickrx.js)
+// and http's them up to http://wow.metoffice.gov.uk/
 // Licence: MIT Licence (https://github.com/ITWrangler/meteostick.js/blob/master/LICENSE)
 // Copyright 2016 Shaun Osborne
-// run with 'node meteosticktx.js -h' for help
+// run with 'node upload2wow.js -h' for help
 // Note: this script will never stop CTRL-C to exit
 // Versions:
 // 0.5 - initial
+// 0.6 - tidy up, renamed, added site commad args
 
 var program = require('commander');
 var sqlite3 = require('sqlite3');
@@ -15,10 +15,10 @@ var http = require('http');
 var gDBName = 'meteostickrx.db';
 var gDBTable = 'tbl_weatherdata';
 var gDelayMS = 900000; /* default 15 mins */
-var gSiteID = 'siteid='+'952386001';
+var gSiteID = 'siteid=';
 var gSiteKey = 'siteAuthenticationKey='
-var gSW='softwaretype=custom'
-var gWOWData = { /*globally available weather data object */
+var gSW='softwaretype=https://github.com/ITWrangler/meteostick.js'
+var gWOWData = { /*globally available weather data object with field we're uploading to WOW*/
   dateutc : "n/a",
   winddir: 'n/a',
   windspeedmph: 'n/a',
@@ -33,12 +33,15 @@ program.version('0.5')
 .option('-m --minutes [interval minutes]', 'output interval timer (minutes)')
 //.option('-o --outputtype [JSON|CSV|SQL]', 'output type', 'JSON')
 .option('-q --quiet', 'run quietly (no statuses etc)')
+.option('-s --site [site]', 'value for siteid=')
 .option('-k --key [key]', 'value for siteAuthenticationKey= ')
 .parse(process.argv);
 
+/* process command line args */
 if(program.interval){
   gDelayMS = program.interval*1000;
 }
+
 if(program.minutes){
   gDelayMS = (program.minutes*60)*1000;
 }
@@ -47,16 +50,25 @@ if(program.key){
   gSiteKey=gSiteKey+program.key;
 }
 else {
-  throw new Error('must provide siteAuthenticationKey= (via -k)');
+  throw new Error('must provide siteAuthenticationKey= (using -k)');
+}
+
+if(program.site){
+  gSiteID=gSiteID+program.site;
+}
+else {
+  gSiteID=gSiteID+'952386001'; // a cludge, my siteid hard coded
+  // alternatively you could throw an error here like this..
+  //throw new Error('must provide siteID= (using -s)');
 }
 
 //hello!
 if(!program.quiet){
-  console.log("Meteostick Transmitter");
+  console.log("Upload to WOW (http://wow.metoffice.gov.uk/)");
   console.log("Interval: "+gDelayMS+"(ms), "+(gDelayMS/60)/1000+"(minutes)");
 }
 
-var db = new sqlite3.Database(gDBName,function(err){
+var db = new sqlite3.Database(gDBName, 'OPEN_READONLY', function(err){
    if(err){
      throw new Error(err);
    }
@@ -69,10 +81,7 @@ outputData();
 
 /* end of main... */
 
-/* rather than use interval timer here (which caused issues) using this recursive
-timer approach as suggested at:
-https://docs.nodejitsu.com/articles/javascript-conventions/what-are-the-built-in-timer-functions
-*/
+
 function outputData() {
 db.get("SELECT * FROM " + gDBTable + " ORDER BY dtg DESC", function(err, row){
       if(err){
@@ -108,5 +117,9 @@ db.get("SELECT * FROM " + gDBTable + " ORDER BY dtg DESC", function(err, row){
       }
 
   });
-      setTimeout(outputData,gDelayMS);
+  /* rather than use interval timer here (which caused issues) using this recursive
+  timer approach as suggested at:
+  https://docs.nodejitsu.com/articles/javascript-conventions/what-are-the-built-in-timer-functions
+  */
+  setTimeout(outputData,gDelayMS);
 }
