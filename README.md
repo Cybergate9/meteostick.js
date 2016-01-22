@@ -3,7 +3,7 @@ Node.js code for communicating with the [Meteostick](http://www.smartbedded.com/
 
 It's all a bit rough around the edges at the moment but whats here works..
 
-The short version is meteostickrx.js running continuously updating a sqlite3 db, then upload2wow.js reads the last values from that database on a timer schedule (default 15 mins) and uploads to your WOW site (e.g http://wow.metoffice.gov.uk/tabulardata?&siteID=952386001) 
+The short version is meteostickrx.js running continuously updating a sqlite3 db, then upload2wow.js reads the last values from that database on a timer schedule (default 15 mins) and uploads to your WOW site (e.g http://wow.metoffice.gov.uk/tabulardata?&siteID=952386001)
 
 ### Files
 
@@ -77,7 +77,7 @@ Hardware: FTDI VCP drivers are already on Debian so your meteostick should regis
 
 ### An aside... Installing Node.js 5.x on Debian
 
-A number of problems are solved by moving from node.js 0.10.x (a standard apt-get install nodejs uses 0.10.x) to 5.4.x on Debian. So the quick version is:
+A number of problems are solved by moving from node.js 0.10.x (a standard 'apt-get install nodejs' uses 0.10.x) to 5.4.x on Debian. So the quick version is:
 
 Install 5.x using:
 
