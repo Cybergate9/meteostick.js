@@ -96,7 +96,7 @@ db.get("SELECT * FROM " + gDBTable + " ORDER BY dtg DESC", function(err, row){
         gWOWData.humidity = row.outsidehumidity;
         gWOWData.baromin = row.insidepressure/33.8638866667;
         var req = {
-          hostname : "http://weatherstation.wunderground.com",
+          hostname : "weatherstation.wunderground.com",
           port: 80,
           path : '/weatherstation/updateweatherstation.php?'+gSiteID+'&'+gSiteKey+'&'+gSW+'&dateutc='+
                   gWOWData.dateutc+'&winddir='+gWOWData.winddir+'&windspeedmph='+
