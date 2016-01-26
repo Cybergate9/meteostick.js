@@ -33,6 +33,7 @@ var gCurrentData={ /*globally available weather data object */
   winddirection: 'n/a',
   outsidetemp: 'n/a',
   outsidehumidity: 'n/a',
+  rainticks: 0,
   insidetemp: 'n/a',
   insidepressure: 'n/a',
   rfpackets: 'n/a',
@@ -198,7 +199,7 @@ function msDataParse(data,type){
      }
      if(type==='CSV'){
        gCurrentData.txid = parts[1];
-       gCurrentData.rain = parts[2];
+       gCurrentData.rainticks = parts[2];
        gCurrentData.signalstrength = parts[3];
        if(parts[4] !== undefined){
          gCurrentData.warnings='low battery';
@@ -207,7 +208,7 @@ function msDataParse(data,type){
      }
      if(type==='SQL'){
        gCurrentData.txid = parts[1];
-       gCurrentData.rain = parts[2];
+       gCurrentData.rainticks = parts[2];
        gCurrentData.signalstrength = parts[3];
        if(parts[3] !== undefined){
          gCurrentData.warnings='low battery'
@@ -321,6 +322,7 @@ function getCurrentDataCSV(){
   gCurrentData.winddirection+'","'+
   gCurrentData.outsidetemp+'","'+
   gCurrentData.outsidehumidity+'","'+
+  gCurrentData.rainticks+'","'+
   gCurrentData.insidetemp+'","'+
   gCurrentData.insidepressure+'","'+
   gCurrentData.signalstrength+'","'+
@@ -352,6 +354,7 @@ function writeCurrentDataSQL(){
       gCurrentData.winddirection,
       gCurrentData.outsidetemp,
       gCurrentData.outsidehumidity,
+      gCurrentData.rainticks,
       gCurrentData.insidetemp,
       gCurrentData.insidepressure,
       gCurrentData.signalstrength,

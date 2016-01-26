@@ -15,7 +15,7 @@ db.serialize(function() {
   db.run(
     "CREATE TABLE tbl_weatherdata (" +
     "dtg int, txid int, windspeed int, winddirection int," +
-    "outsidetemp int, outsidehumidity int, insidetemp int," +
+    "outsidetemp int, outsidehumidity int, rainticks int, insidetemp int," +
     "insidepressure int, signalstrength int, rfpackets int," +
     " solarpanel int, warnings varchar(255));"
   );
